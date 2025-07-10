@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wind Tunnel</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h1>Wind Tunnel Pressure Viewer</h1>
+
+  <div class="image-container">
+    <img src="{{ url_for('static', filename='car_wind_tunnel.png') }}" alt="Wind Tunnel" class="background-image">
+
+    <div class="sensor" id="P1" onclick="showHistory('P1')">P1</div>
+    <div class="sensor" id="P2" onclick="showHistory('P2')">P2</div>
+    <div class="sensor" id="P3" onclick="showHistory('P3')">P3</div>
+    <div class="sensor" id="P4" onclick="showHistory('P4')">P4</div>
+    <div class="sensor" id="P5" onclick="showHistory('P5')">P5</div>
+  </div>
+
+  <div id="history-container" class="scroll-box">
+    <p>파란색 센서 버튼을 클릭하면 데이터가 여기에 표시됩니다.</p>
+    <p>Click the blue sensor button to display the data here.
+    </p>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
