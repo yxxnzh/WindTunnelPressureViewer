@@ -5,13 +5,19 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+import os
+import pymysql
+
 db = pymysql.connect(
-    host='localhost',
-    user='root',      
-    password='1234',  
-    database='pressure_sensor_data', 
+    host=os.environ.get("DB_HOST"),
+    port=int(os.environ.get("DB_PORT")),
+    user=os.environ.get("DB_USER"),
+    password=os.environ.get("DB_PASS"),
+    database=os.environ.get("DB_NAME"),
     cursorclass=pymysql.cursors.DictCursor
 )
+
+
 
 @app.route('/')
 def index():
