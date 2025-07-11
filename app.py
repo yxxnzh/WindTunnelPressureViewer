@@ -1,84 +1,93 @@
 from flask import Flask, jsonify, render_template
-import pymysql
 from flask_cors import CORS
+import pymysql
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-import os
-import pymysql
-
-db = pymysql.connect(
-    host=os.environ.get("DB_HOST"),
-    port=int(os.environ.get("DB_PORT")),
-    user=os.environ.get("DB_USER"),
-    password=os.environ.get("DB_PASS"),
-    database=os.environ.get("DB_NAME"),
-    cursorclass=pymysql.cursors.DictCursor
-)
-
-
+def get_connection():
+    return pymysql.connect(
+        host=os.environ.get("DB_HOST"),
+        port=int(os.environ.get("DB_PORT")),
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASS"),
+        database=os.environ.get("DB_NAME"),
+        cursorclass=pymysql.cursors.DictCursor
+    )
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-
 @app.route('/api/pressure')
 def get_all_pressure_data():
     try:
-        with db.cursor() as cursor:
+        conn = get_connection()
+        with conn.cursor() as cursor:
             cursor.execute("SELECT P1, P2, P3, P4, P5 FROM pressure_sensor_data")
             rows = cursor.fetchall()
-            return jsonify(rows)
+        conn.close()
+        return jsonify(rows)
+    except pymysql.MySQLError as e:
+        print("[MYSQL ERROR]", repr(e))
+        return jsonify({'error': repr(e)}), 500
     except Exception as e:
-        print("[ERROR]", str(e))
-        return jsonify({'error': str(e)}), 500
-
+        print("[GENERIC ERROR]", repr(e))
+        return jsonify({'error': repr(e)}), 500
 
 @app.route('/api/pressure/<sensor_name>')
 def get_sensor_history(sensor_name):
     try:
-        if sensor_name not in ['P1', 'P2', 'P3', 'P4', 'P5']:
+        valid_sensors = ['P1', 'P2', 'P3', 'P4', 'P5']
+        if sensor_name not in valid_sensors:
             return jsonify({'error': 'Invalid sensor name'}), 400
 
-        with db.cursor() as cursor:
-            # 해당 센서의 전체 값 이력 가져오기
-            query = f"SELECT {sensor_name} AS value FROM pressure_sensor_data"
+        conn = get_connection()
+        with conn.cursor() as cursor:
+            query = f"SELECT `{sensor_name}` AS value FROM pressure_sensor_data"
             cursor.execute(query)
             rows = cursor.fetchall()
-            return jsonify(rows)
+        conn.close()
+        return jsonify(rows)
+    except pymysql.MySQLError as e:
+        print("[MYSQL ERROR]", repr(e))
+        return jsonify({'error': repr(e)}), 500
     except Exception as e:
-        print("[ERROR]", str(e))
-        return jsonify({'error': str(e)}), 500
+        print("[GENERIC ERROR]", repr(e))
+        return jsonify({'error': repr(e)}), 500
 
 @app.route('/api/pressure/latest')
 def get_latest_pressure():
     try:
-        with db.cursor(pymysql.cursors.DictCursor) as cursor:
+        conn = get_connection()
+        with conn.cursor() as cursor:
             cursor.execute("""
-            SELECT P1, P2, P3, P4, P5
-            FROM pressure_sensor_data
-            ORDER BY timestamp DESC
-            LIMIT 1
+                SELECT P1, P2, P3, P4, P5
+                FROM pressure_sensor_data
+                ORDER BY timestamp DESC
+                LIMIT 1
             """)
             row = cursor.fetchone()
-            if not row:
-                return jsonify({'error': 'No data found'}), 404
+        conn.close()
 
-            result = [
-                {"sensor": "P1", "value": row["P1"]},
-                {"sensor": "P2", "value": row["P2"]},
-                {"sensor": "P3", "value": row["P3"]},
-                {"sensor": "P4", "value": row["P4"]},
-                {"sensor": "P5", "value": row["P5"]}
-            ]
-            return jsonify(result)
+        if not row:
+            return jsonify({'error': 'No data found'}), 404
+
+        result = [
+            {"sensor": "P1", "value": row["P1"]},
+            {"sensor": "P2", "value": row["P2"]},
+            {"sensor": "P3", "value": row["P3"]},
+            {"sensor": "P4", "value": row["P4"]},
+            {"sensor": "P5", "value": row["P5"]}
+        ]
+        return jsonify(result)
+    except pymysql.MySQLError as e:
+        print("[MYSQL ERROR]", repr(e))
+        return jsonify({'error': repr(e)}), 500
     except Exception as e:
-        print("[ERROR]", str(e))
-        return jsonify({'error': str(e)}), 500
-
-import os
+        print("[GENERIC ERROR]", repr(e))
+        return jsonify({'error': repr(e)}), 500
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
