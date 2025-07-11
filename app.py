@@ -55,12 +55,12 @@ def get_sensor_history(sensor_name):
 @app.route('/api/pressure/latest')
 def get_latest_pressure():
     try:
-        with db.cursor() as cursor:
+        with db.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute("""
-                SELECT P1, P2, P3, P4, P5
-                FROM pressure_sensor_data
-                ORDER BY 1 DESC
-                LIMIT 1
+            SELECT P1, P2, P3, P4, P5
+            FROM pressure_sensor_data
+            ORDER BY timestamp DESC
+            LIMIT 1
             """)
             row = cursor.fetchone()
             if not row:
