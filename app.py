@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 import pymysql
@@ -13,6 +14,8 @@ def get_connection():
         user=os.environ.get("DB_USER"),
         password=os.environ.get("DB_PASS"),
         database=os.environ.get("DB_NAME"),
+        connect_timeout=5,
+        read_timeout=10, 
         cursorclass=pymysql.cursors.DictCursor
     )
 
@@ -22,12 +25,12 @@ def index():
 
 @app.route('/api/pressure')
 def get_all_pressure_data():
+    conn = None
     try:
         conn = get_connection()
         with conn.cursor() as cursor:
             cursor.execute("SELECT P1, P2, P3, P4, P5 FROM pressure_sensor_data")
             rows = cursor.fetchall()
-        conn.close()
         return jsonify(rows)
     except pymysql.MySQLError as e:
         print("[MYSQL ERROR]", repr(e))
@@ -35,9 +38,13 @@ def get_all_pressure_data():
     except Exception as e:
         print("[GENERIC ERROR]", repr(e))
         return jsonify({'error': repr(e)}), 500
+    finally:
+        if conn:
+            conn.close()
 
 @app.route('/api/pressure/<sensor_name>')
 def get_sensor_history(sensor_name):
+    conn = None
     try:
         valid_sensors = ['P1', 'P2', 'P3', 'P4', 'P5']
         if sensor_name not in valid_sensors:
@@ -48,7 +55,6 @@ def get_sensor_history(sensor_name):
             query = f"SELECT `{sensor_name}` AS value FROM pressure_sensor_data"
             cursor.execute(query)
             rows = cursor.fetchall()
-        conn.close()
         return jsonify(rows)
     except pymysql.MySQLError as e:
         print("[MYSQL ERROR]", repr(e))
@@ -56,9 +62,13 @@ def get_sensor_history(sensor_name):
     except Exception as e:
         print("[GENERIC ERROR]", repr(e))
         return jsonify({'error': repr(e)}), 500
+    finally:
+        if conn:
+            conn.close()
 
 @app.route('/api/pressure/latest')
 def get_latest_pressure():
+    conn = None
     try:
         conn = get_connection()
         with conn.cursor() as cursor:
@@ -69,7 +79,6 @@ def get_latest_pressure():
                 LIMIT 1
             """)
             row = cursor.fetchone()
-        conn.close()
 
         if not row:
             return jsonify({'error': 'No data found'}), 404
@@ -88,6 +97,9 @@ def get_latest_pressure():
     except Exception as e:
         print("[GENERIC ERROR]", repr(e))
         return jsonify({'error': repr(e)}), 500
+    finally:
+        if conn:
+            conn.close()
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
