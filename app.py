@@ -1,4 +1,3 @@
-
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 import pymysql
@@ -52,9 +51,15 @@ def get_sensor_history(sensor_name):
 
         conn = get_connection()
         with conn.cursor() as cursor:
-            query = f"SELECT `{sensor_name}` AS value FROM pressure_sensor_data"
+            query = f"""
+                SELECT `{sensor_name}` AS value
+                FROM pressure_sensor_data
+                ORDER BY timestamp DESC
+                LIMIT 4500
+            """
             cursor.execute(query)
-            rows = cursor.fetchall()
+            rows = cursor.fetchall()[::-1]  # 최신 데이터부터 가져와서 다시 정순으로
+
         return jsonify(rows)
     except pymysql.MySQLError as e:
         print("[MYSQL ERROR]", repr(e))
@@ -104,4 +109,3 @@ def get_latest_pressure():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
-
