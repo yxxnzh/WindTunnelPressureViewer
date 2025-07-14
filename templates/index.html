@@ -18,14 +18,16 @@
     <div class="sensor" id="P5">P5</div>
   </div>
 
-  <div style="display: flex; justify-content: center; align-items: flex-start; gap: 30px; margin-top: 30px; flex-wrap: wrap;"></div>
-  <div id="history-container" class="scroll-box">
+  <div style="display: flex; justify-content: center; align-items: flex-start; gap: 30px; margin-top: 30px; flex-wrap: wrap;">
+  <div id="history-container" class="scroll-box" style="flex: 1; min-width: 300px;">
     <p>파란색 센서 버튼을 클릭하면 데이터가 여기에 표시됩니다.</p>
     <p>Click the blue sensor button to display the data here.</p>
-    <p> ※ Due to the large number of data, the button can be pressed and delayed for 2-3 seconds.</p>
+    <p>※ Due to the large number of data, the button can be pressed and delayed for 2-3 seconds.</p>
   </div>
+
   <div id="chart-container" style="flex: 2; min-width: 500px; height: 400px;"></div>
-</div>
+  </div>
+
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
