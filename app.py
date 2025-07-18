@@ -18,9 +18,29 @@ def get_connection():
         cursorclass=pymysql.cursors.DictCursor
     )
 
-@app.route('/')
+@app.route('/index.html')
 def index():
     return render_template('index.html')
+
+@app.route('/Data_Analysis')
+def Data_Analysis():
+    return render_template('Data_Analysis.html')
+
+@app.route('/Prediction')
+def Prediction():
+    return render_template('Prediction.html')
+
+@app.route('/page3')
+def page3():
+    return render_template('page3.html')
+
+@app.route('/page4')
+def page4():
+    return render_template('page4.html')
+
+@app.route('/page5')
+def page5():
+    return render_template('page5.html')
 
 @app.route('/api/pressure')
 def get_all_pressure_data():

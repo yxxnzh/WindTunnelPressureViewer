@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wind Tunnel</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar" id="sidebar-container">
+    </div>
+
+    <div class="content">
+      <h1>Wind Tunnel Pressure Viewer</h1>
+
+      <div class="image-container">
+        <img src="{{ url_for('static', filename='car_wind_tunnel.png') }}" alt="Wind Tunnel" class="background-image">
+
+        <div class="sensor" id="P1" onclick="showHistory('P1')">P1</div>
+        <div class="sensor" id="P2" onclick="showHistory('P2')">P2</div>
+        <div class="sensor" id="P3" onclick="showHistory('P3')">P3</div>
+        <div class="sensor" id="P4" onclick="showHistory('P4')">P4</div>
+        <div class="sensor" id="P5" onclick="showHistory('P5')">P5</div>
+      </div>
+
+      <div style="display: flex; justify-content: center; align-items: flex-start; gap: 30px; margin-top: 30px; flex-wrap: wrap;">
+        <div id="history-container" class="scroll-box" style="flex: 1; max-width: 400px; height: 400px; overflow-y: auto;">
+          <p>파란색 센서 버튼을 클릭하면 데이터가 여기에 표시됩니다.</p>
+          <p>Click the blue sensor button to display the data here.</p>
+        </div>
+
+        <div id="chart-container" style="flex: 2; min-width: 500px; height: 400px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    fetch("/static/sidebar.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("sidebar-container").innerHTML = data;
+      });
+  </script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
