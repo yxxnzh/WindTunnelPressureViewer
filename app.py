@@ -1,3 +1,4 @@
+
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 import pymysql
@@ -17,7 +18,9 @@ def get_connection():
         read_timeout=10, 
         cursorclass=pymysql.cursors.DictCursor
     )
-
+@app.route('/')
+def home():
+    return render_template('index.html')
 @app.route('/index.html')
 def index():
     return render_template('index.html')
