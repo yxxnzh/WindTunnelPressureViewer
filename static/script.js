@@ -1,13 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const sensors = ["P1", "P2", "P3", "P4", "P5"];
-  sensors.forEach(sensor => {
-    const button = document.getElementById(sensor);
-    if (button) {
-      button.addEventListener("click", () => showHistory(sensor));
-    }
-  });
-});
-
 function showHistory(sensorName) {
   fetch(`/api/pressure/${sensorName}`)
     .then(res => res.json())
@@ -21,11 +11,12 @@ function showHistory(sensorName) {
         return;
       }
 
-      // 텍스트 목록 출력
       const listItems = data.map((row, idx) => `<li>${row.value}</li>`).join('');
-      container.innerHTML = `<h3>${sensorName} Sensor History</h3><ul>${listItems}</ul>`;
+      container.innerHTML = ` <h3 style="text-align: center; margin-bottom: 15px;">${sensorName} Sensor History</h3>
+                              <ul style="list-style-position: outside; padding-left: 10px; text-align: left; margin: 0;">
+      ${listItems} </ul>`;
 
-      // Plotly 그래프 출력
+
       const values = data.map(row => row.value);
       const xValues = Array.from({ length: values.length }, (_, i) => i+1);
 
@@ -40,7 +31,6 @@ function showHistory(sensorName) {
 
       const layout = {
         title: `${sensorName} Sensor Graph`,
-        xaxis: { title: 'Index' },
         yaxis: { title: 'Pressure' }
       };
 

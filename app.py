@@ -18,11 +18,13 @@ def get_connection():
         read_timeout=10, 
         cursorclass=pymysql.cursors.DictCursor
     )
+
 @app.route('/')
-def home():
-    return render_template('index.html')
-@app.route('/index.html')
 def index():
+    return render_template('index.html')
+
+@app.route('/index.html')
+def index_html():
     return render_template('index.html')
 
 @app.route('/Data_Analysis')
