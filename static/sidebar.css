@@ -7,7 +7,7 @@
 .container {
   display: flex;
   height: 100vh;
-  width: 100vw; 
+  width: 100vw;
   overflow: hidden;
 }
 
@@ -29,7 +29,6 @@ body {
   flex-shrink: 0;
   text-align: center;
 }
-
 
 .sidebar h2 {
   font-size: 22px;
@@ -60,7 +59,7 @@ body {
 
 .content {
   flex-grow: 1;
-  padding: 60px 40px;
+  padding: 40px 40px;
 }
 
 .content h1 {

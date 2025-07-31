@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Correlation Analysis</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+</head>
+<style>
+  .correlation-analysis {
+  max-width: 1000px;
+  max-height: 900px;
+  margin: 40px auto;
+  padding: 20px 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.correlation-analysis h1 {
+  font-size: 2.2rem;
+  color: #004aad;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.correlation-analysis .description {
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #555;
+}
+
+.analysis-wrapper {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.heatmap-wrapper {
+  flex: 1 1 400px;
+  max-width: 450px;
+  text-align: center;
+}
+
+.heatmap-wrapper img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  border: 1px solid #ddd;
+}
+
+.summary-box {
+  flex: 1 1 300px;
+  background-color: #f0f5ff;
+  border-radius: 12px;
+  padding: 20px 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 139, 0.15);
+  color: #003d99;
+  font-size: 1.1rem;
+}
+
+.summary-box h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #003d99;
+  padding-bottom: 6px;
+  font-weight: 700;
+}
+
+.summary-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.summary-list li {
+  margin-bottom: 14px;
+  position: relative;
+  padding-left: 18px;
+  color: #002766;
+}
+
+.summary-list li::before {
+  content: '•';
+  color: #2e69cf;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 1.3rem;
+}
+
+.highlight.positive {
+  background-color: #dbe9ff;
+  color: #004aad;
+  font-weight: 700;
+  padding: 0 6px;
+  border-radius: 6px;
+}
+</style>
+<body>
+  <div id="sidebar-container"></div>
+  <div class="content">
+    <section class="correlation-analysis">
+      <h1>Pressure Sensor correlation Analysis</h1>
+      <p class="description">
+        This is the result of analyzing the correlation between sensors <strong>P1 to P5</strong>.<br>
+        The correlation coefficient is between <em>-1</em> and <em>1</em>, and the closer to <em>1</em>, the closer to <em>-1</em>, the more negative the correlation.
+      </p>
+
+      <div class="analysis-wrapper">
+        <div class="heatmap-wrapper">
+          <img src="{{ url_for('static', filename='Correlation_Heatmap.png') }}" alt="Correlation Heatmap" />
+        </div>
+
+        <div class="summary-box">
+          <h2>Summary</h2>
+          <ul class="summary-list">
+            <li>The correlation coefficient between <strong>P1 and P2</strong> is <span class="highlight negative">-0.017</span>, which is almost negligible.</li>
+            <li><strong>P3 and P4</strong> are virtually uncorrelated, with <span class="highlight negative">-0.001</span>.</li>
+            <li>The correlation between <strong>P4 and P5</strong> is very weak at <span class="highlight negative">0.017</span>.</li>
+            <li>Overall, there is very little or no correlation between <strong>P1</strong> to sensors.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    fetch("/static/sidebar.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("sidebar-container").innerHTML = data;
+      });
+  </script>
+</body>
+</html>

@@ -6,15 +6,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
 </head>
-<body>
-  <div id="sidebar-container"></div>
+<style>
+.logo-box {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  height: 60px;     
+}
 
-  <div class="content">
-    <h1>Jnu & Malaya Global Collaborative PBL</h1>
-    <div class="logo-container">
-      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+.logo-box img {
+  display: block;
+  margin-top: 550px;
+  height: 600px;
+  width: 600px;
+  object-fit: contain;
+}
+</style>
+<body>
+  <div class="container">
+    <div id="sidebar-container"></div>
+
+    <div class="content">
+      <div class="text-box">
+        <h1>Jnu & Malaya Global Collaborative PBL</h1>
+      </div>
+      <div class="logo-box">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+      </div>
     </div>
-  
   </div>
 
   <script>
@@ -25,4 +44,5 @@
       });
   </script>
 </body>
+
 </html>

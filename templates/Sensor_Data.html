@@ -23,13 +23,12 @@
       </div>
 
       <div style="display: flex; justify-content: center; align-items: flex-start; gap: 30px; margin-top: 30px; flex-wrap: wrap;">
-        <div id="history-container" class="scroll-box" style="flex: 1; max-width: 400px; height: 400px; overflow-y: auto;">
-          <p>파란색 센서 버튼을 클릭하면 데이터가 여기에 표시됩니다.</p>
-          <p>Click the blue sensor button to display the data here.</p>
-          <p>※ Due to the large amount of data, there may be a delay of 2–3 seconds after clicking the button.</p>
+        <div id="history-container" class="scroll-box" style="flex: 1; max-width: 350px; height: 400px; overflow-y: auto;">
+          <p style="margin-right: 38px; margin-bottom: 20px;">Click the blue sensor button to display the data here.</p>
+          <p style="margin-right: 38px;">※ Due to the large amount of data, there may be a delay of 2–3 seconds after clicking the button.</p>
         </div>
 
-        <div id="chart-container" style="flex: 2; min-width: 500px; height: 400px;"></div>
+        <div id="chart-container" style="flex: 2; max-width: 750px; height: 350px;"></div>
       </div>
     </div>
   </div>
@@ -44,5 +43,4 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
-
 </html>

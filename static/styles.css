@@ -43,8 +43,8 @@ h1 {
 
 .scroll-box {
   width: 70%;
-  max-height: 300px;
-  margin: 30px auto 0;
+  max-height: 340px;
+  margin: 10px auto 0 30px;
   overflow-y: auto;
   background: #fff;
   border: 1px solid #ccc;
@@ -54,15 +54,6 @@ h1 {
   text-align: left;
 }
 
-.logo-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 60px;
-  padding: 0 30px;
-}
-
-.logo-container img {
-  height: 60px;
-  object-fit: contain;
+#sidebar-container{
+  width: 220px
 }

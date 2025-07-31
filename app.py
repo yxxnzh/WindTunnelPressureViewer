@@ -27,17 +27,17 @@ def index():
 def index_html():
     return render_template('index.html')
 
-@app.route('/Data_Analysis')
-def Data_Analysis():
-    return render_template('Data_Analysis.html')
+@app.route('/Sensor_Data')
+def Sensor_Data():
+    return render_template('Sensor_Data.html')
+
+@app.route('/Correlation_Analysis')
+def Correlation_Analysis():
+    return render_template('Correlation_Analysis.html')
 
 @app.route('/Prediction')
 def Prediction():
     return render_template('Prediction.html')
-
-@app.route('/page3')
-def page3():
-    return render_template('page3.html')
 
 @app.route('/page4')
 def page4():

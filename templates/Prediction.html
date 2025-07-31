@@ -4,13 +4,248 @@
   <meta charset="UTF-8" />
   <title>Prediction</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .content {
+      max-width: 960px;
+      margin: 25px auto 80px;
+      padding: 0 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      text-align: center;
+      font-size: 1.15rem;
+      color: #666;
+      margin-bottom: 40px;
+      margin-top: 18px;
+      line-height: 1.5;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .prediction-section {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: stretch;
+      margin-bottom: 30px;
+    }
+
+    .result-container {
+      flex: 1 1 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      height: 320px;
+      justify-content: center;
+    }
+
+    .result-box {
+      background-color: #fff;
+      border-left: 6px solid #2980b9;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 24px 28px;
+      box-sizing: border-box;
+      transition: box-shadow 0.3s ease;
+    }
+    .result-box:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .result-box h2 {
+      color: #2c3e50;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .metric {
+      font-size: 1.05rem;
+      margin: 8px 0;
+      line-height: 1.3;
+    }
+
+    .metric span.label {
+      font-weight: 700;
+      color: #34495e;
+      margin-right: 8px;
+      display: inline-block;
+      min-width: 65px;
+    }
+
+    .metric span.value {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .bad-score {
+      color: #e74c3c;
+    }
+
+    .good-score {
+      color: #27ae60;
+    }
+
+    .chart-container {
+      flex: 1 1 380px;
+      max-width: 400px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      height: 320px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #metricsChart {
+      width: 100% !important;
+      height: 280px !important;
+    }
+
+    .analysis-section {
+      max-width: 960px;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+      padding: 20px 36px;
+      margin-top: 10px;
+      box-sizing: border-box;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+
+    .analysis-section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      border-left: 5px solid #2980b9;
+      padding-left: 14px;
+    }
+
+    .analysis-section ul {
+      list-style-type: disc;
+      padding-left: 22px;
+      margin: 0;
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .analysis-section ul li {
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 840px) {
+      .prediction-section {
+        flex-direction: column;
+        align-items: center;
+      }
+      .result-container, .chart-container {
+        height: auto;
+        max-width: 100%;
+      }
+      #metricsChart {
+        height: 300px !important;
+      }
+      .content {
+        margin: 30px 15px 50px;
+      }
+      .analysis-section {
+        padding: 20px 24px;
+      }
+    }
+
+  </style>
 </head>
 <body>
   <div id="sidebar-container"></div>
+
   <div class="content">
     <h1>Prediction</h1>
-    <p>이 페이지는 Predicion Page입니다.</p>
+    <p class="description">This page shows the results of predicting P4 and P5 based on P1 to P3 sensors.</p>
+
+    <div class="prediction-section">
+      <div class="result-container">
+        <div class="result-box">
+          <h2>P4 predictive results (P1~P3 → P4)</h2>
+          <div class="metric"><span class="label">📏 MSE:</span> <span class="value bad-score">239.08</span></div>
+          <div class="metric"><span class="label">📈 R² :</span> <span class="value bad-score">-0.109</span></div>
+        </div>
+
+        <div class="result-box">
+          <h2>P5 predictive results (P1~P3 → P5)</h2>
+          <div class="metric"><span class="label">📏 MSE:</span> <span class="value bad-score">228.11</span></div>
+          <div class="metric"><span class="label">📈 R² :</span> <span class="value bad-score">-0.078</span></div>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="metricsChart"></canvas>
+      </div>
+    </div>
+
+    <div class="analysis-section">
+      <h2>Interpretation of results</h2>
+      <ul>
+        <li>The R² values of P4 and P5 were lower than 0, indicating that the input data alone did not provide sufficient explanatory power.</li>
+        <li>The error (MSE) is measured at a high level, which requires improved data quality and precision of predictive models.</li>
+      </ul>
+    </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('metricsChart');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['P4 - MSE', 'P4 - R²', 'P5 - MSE', 'P5 - R²'],
+        datasets: [{
+          label: '예측 성능 지표',
+          data: [239.08, -0.109, 228.11, -0.078],
+          backgroundColor: ['#3498db', '#e74c3c', '#3498db', '#e74c3c']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: '📊 P4/P5 predictive performance comparison',
+            font: { size: 16 }
+          }
+        },
+        scales: {
+          y: { beginAtZero: false }
+        }
+      }
+    });
+  </script>
 
   <script>
     fetch("/static/sidebar.html")

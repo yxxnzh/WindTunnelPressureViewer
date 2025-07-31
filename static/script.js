@@ -11,14 +11,15 @@ function showHistory(sensorName) {
         return;
       }
 
-      const listItems = data.map((row, idx) => `<li>${row.value}</li>`).join('');
-      container.innerHTML = ` <h3 style="text-align: center; margin-bottom: 15px;">${sensorName} Sensor History</h3>
-                              <ul style="list-style-position: outside; padding-left: 10px; text-align: left; margin: 0;">
-      ${listItems} </ul>`;
-
+      const listItems = data.map((row) => `<li>${row.value}</li>`).join('');
+      container.innerHTML = `
+        <h3 style="text-align: center; margin-bottom: 15px;">${sensorName} Sensor History</h3>
+        <ul style="list-style-position: outside; padding-left: 10px; text-align: left; margin: 0;">
+          ${listItems}
+        </ul>`;
 
       const values = data.map(row => row.value);
-      const xValues = Array.from({ length: values.length }, (_, i) => i+1);
+      const xValues = Array.from({ length: values.length }, (_, i) => i + 1);
 
       const trace = {
         x: xValues,
