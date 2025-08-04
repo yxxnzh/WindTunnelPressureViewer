@@ -57,3 +57,16 @@ h1 {
 #sidebar-container{
   width: 220px
 }
+
+.logo-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 60px;
+  padding: 0 30px;
+}
+
+.logo-container img {
+  height: 60px;
+  object-fit: contain;
+}
